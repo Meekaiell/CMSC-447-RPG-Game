@@ -1,7 +1,7 @@
 Files:
 
 class Question.py  - contains the the code for the question container
-tests.py           - contains tests for class Question
+Question_Test.py           - contains tests for class Question
 
 
 
@@ -115,7 +115,7 @@ Description of class Question.py:
     #--------------------------------------------------------------------------------------------------------------------  
 
 
-Description of tests.py:
+Description of Question_Test.py:
 
 contains 2 parts: No-verbose tests(Pass/Fail)
                   Verbose tests (prints content of dictionary, questions, separate question bits)
