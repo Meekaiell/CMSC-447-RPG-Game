@@ -194,13 +194,112 @@ class Database:
     def DoesDBExist(self, argDb):
         query = "SHOW DATABASES LIKE " + argDb + ";"
         
-        db = __runQuestion(query)
+        db = self.__runQuestion(query)
         
         if(len(db) > 0):
             return True
         else:
             return False
+    
+    #----------------------------------------------------------------
+    # CreateDb(self, argDb)
+    # DESC:
+    #   Creates a new database of name [argDb]
+    #
+    # ARGUMENT:
+    #   argDb - STRING Name of database to create.
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   argDb does not already exist as a database.
+    #----------------------------------------------------------------
+    def CreateDb(self, argDb):
+        query = "CREATE DATABASE " + argDb + ";"
         
+        return self.__runCommand(query)
+    
+    #----------------------------------------------------------------
+    # Insert(self, argTable, argData)
+    # DESC:
+    #   Inserts [argData] into arg[Table]
+    #
+    # ARGUMENT:
+    #   argDb - STRING Name of table to add to.
+    #   argData - STRING Data to add to table. Formated to SQL insert 
+    #     for table.
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   argTable exists in current database.
+    #----------------------------------------------------------------
+    def Insert(self, argTable, argData):
+        query = "INSERT INTO " + argTable + " VALUES\n" + argData + ";"
+        
+        return self.__runCommand(query)
+    
+    #----------------------------------------------------------------
+    # Delete(self, argTable, argData)
+    # DESC:
+    #   Tries to delete [argData] from [argTable]
+    #
+    # ARGUMENT:
+    #   argDb - STRING Name of table to delete from.
+    #   argData - STRING Data to delete from table. Formated to SQL 
+    #     search for table.
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   argTable exists in current database.
+    #----------------------------------------------------------------
+    def Delete(self, argTable, argData):
+        query = "DELETE FROM " + argTable + "\nWHERE " + argData + ";"
+        
+        return self.__runCommand(query)
+    
+    #----------------------------------------------------------------
+    # Select(self, argTable, argData)
+    # DESC:
+    #   Finds and returns all data of [argData] type from [argTable] 
+    #   where [argWhere] is true.
+    #
+    # ARGUMENT:
+    #   argDb - STRING Name of table to search in.
+    #   argWhere - STRING Qualifier to narrow down which entires to 
+    #     return. Formated to SQL search for table.
+    #   argData - STRING Data to search for. Formated to SQL 
+    #     search for table.
+    # RETURN:
+    #   LIST STRING - List of datacells that match query. None if 
+    #     command failed.
+    # ASSUMPTION:
+    #   argTable exists in current database.
+    #----------------------------------------------------------------
+    def Select(self, argTable, argWhere, argData):
+        query = "SELECT " + argData + "\nFROM " + argTable + "\nWHERE " + argWhere + ";"
+        
+        return self.__runQuestion(query)
+    
+    #----------------------------------------------------------------
+    # Update(self, argTable, argWhere, argData)
+    # DESC:
+    #   Finds and replaces all data of [argData] type from [argTable] 
+    #   where [argWhere] is true.
+    #
+    # ARGUMENT:
+    #   argDb - STRING Name of table to search in.
+    #   argWhere - STRING Qualifier to narrow down which entires to 
+    #     return. Formated to SQL search for table.
+    #   argData - STRING Data to search for. Formated to SQL 
+    #     search for table.
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   argTable exists in current database.
+    #----------------------------------------------------------------
+    def Update(self, argTable, argWhere, argData):
+        query = "UPDATE " + argTable + "\nSET " + argData + "\nWHERE " + argWhere + ";"
+        
+        return self.__runCommand(query)
 
 
 # In[ ]:
