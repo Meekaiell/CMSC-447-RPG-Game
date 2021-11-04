@@ -481,6 +481,7 @@ class Database:
 if __name__ == "__main__":
     try:
         ret = Database.TestClass(sys.argv[0], sys.argv[1], sys.argv[2])
+        print(ret)
     except Error as err:
             print(f"Error: '{err}'")
 
