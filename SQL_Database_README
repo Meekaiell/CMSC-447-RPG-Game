@@ -1,0 +1,9 @@
+The Database class in SQL_Database can be tested via two methods. 
+
+The first is by running the SQL_Database.py file itself, and passing a SQL Host, User Name, and Password as command line arguments.
+
+The second is by creating a database object and running the method TestClass() through it, once again adding the SQL Host, 
+User Name, and Password as arguments.
+
+Both of these tests require a SQL server to be both running and accessable to the test code. Both will return a list of boolean values.
+If any value returns false, or an error is raised, the tests have failed for some reason.
