@@ -8,10 +8,17 @@ import mysql.connector
 from mysql.connector import Error
 
 
-# In[2]:
+# In[10]:
 
 
 class Database:
+    
+    TABLE_QUESTIONS = """
+    CREATE TABLE questions (
+      question_id INT PRIMARY KEY,
+      question CARCHAR(8000) NOT NULL
+    );
+    """
     
     #----------------------------------------------------------------
     # __init__(self, argHost, argUser, argPswd)
@@ -300,6 +307,115 @@ class Database:
         query = "UPDATE " + argTable + "\nSET " + argData + "\nWHERE " + argWhere + ";"
         
         return self.__runCommand(query)
+    
+    #----------------------------------------------------------------
+    # DeleteTable(self, argTbl)
+    # DESC:
+    #   Attempts to delete table named [argTbl]. Fails if table does 
+    #   not exist.
+    #
+    # ARGUMENT:
+    #   argTbl - STRING Name of table to delete.
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    #----------------------------------------------------------------
+    def DeleteTable(self, argTbl):
+        query = "DROP TABLE " + argTbl + ";"
+        
+        return self.__runCommand(query)
+    
+    #----------------------------------------------------------------
+    # NewTable_Question(self)
+    # DESC:
+    #   Creates a new table based off the SQL command constant 
+    #   TABLE_QUESTIONS defined at the beginning of the class.
+    #
+    # ARGUMENT:
+    #   
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   Table does not already exist.
+    #----------------------------------------------------------------
+    def NewTable_Question(self):
+        query = TABLE_QUESTIONS
+        
+        return self.__runCommand(query)
+    
+    #----------------------------------------------------------------
+    # Insert_Question(self, argID, argQuestion)
+    # DESC:
+    #   Inserts new question in to 'questions' table with an ID of 
+    #   [argID] and a question string of [argQuestion]. Error checks 
+    #   that no other ID of the same number has been entered already.
+    #
+    # ARGUMENT:
+    #   argID - INT Unique integer ID number for question.
+    #   argQuestion - STRING Formated question string from internal 
+    #     data structure.
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'questions' table exists in current database.
+    #----------------------------------------------------------------
+    def Insert_Question(self, argID, argQuestion):
+        check = self.Select("questions", "question_id = " + argID, "*")
+        
+        if(len(check) > 0):
+            print(f"Error: Question ID already exists.")
+            return False
+        
+        insert = "(" + argID + ", '" + argQuestion + "')"
+        
+        return self.Insert("questions", insert)
+    
+    #----------------------------------------------------------------
+    # Delete_Question(self, argID)
+    # DESC:
+    #   Deletes question with ID of [argID].
+    #
+    # ARGUMENT:
+    #   argID - INT Unique integer ID number for question.
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'questions' table exists in current database.
+    #----------------------------------------------------------------
+    def Delete_Question(self, argID):
+        return self.Delete("questions", "question_id = " + argID)
+    
+    #----------------------------------------------------------------
+    # Select_Question(self, argID)
+    # DESC:
+    #   Returns question with ID of [argID].
+    #
+    # ARGUMENT:
+    #   argID - INT Unique integer ID number for question.
+    # RETURN:
+    #   STRING - Question correlating to the ID number. 
+    #     None if ID does not exist.
+    # ASSUMPTION:
+    #   'questions' table exists in current database.
+    #----------------------------------------------------------------
+    def Select_Question(self, argID):
+        return self.Select("questions", "question_id = " + argID, "question")
+    
+    #----------------------------------------------------------------
+    # Update_Question(self, argID, argQuestion)
+    # DESC:
+    #   Attempts to update question at ID [argID] to question [argQuestion].
+    #
+    # ARGUMENT:
+    #   argID - INT Unique integer ID number for question.
+    #   argQuestion - STRING Formated question string from internal 
+    #     data structure.
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'questions' table exists in current database.
+    #----------------------------------------------------------------
+    def Update_Question(self, argID, argQuestion):
+        return self.Insert("questions", "question_id = " + argID, "question = '" + argQuestion + "'")
 
 
 # In[ ]:
