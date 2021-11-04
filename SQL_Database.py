@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 import mysql.connector
 from mysql.connector import Error
+import sys
 
 
-# In[10]:
+# In[ ]:
 
 
 class Database:
@@ -36,7 +37,7 @@ class Database:
     #   BOOLEAN - True if successfully connected. False otherwise.
     #----------------------------------------------------------------
     def __init__(self, argHost, argUser, argPswd):
-        self.sqlSever = None
+        self.sqlServer = None
         self.connected = False
         
         try:
@@ -46,10 +47,8 @@ class Database:
                 passwd = argPswd
             )
             self.connected = True
-            return True
         except Error as err:
             print(f"Error: '{err}'")
-            return False
     #----------------------------------------------------------------
     # __del__(self)
     # DESC:
@@ -111,7 +110,8 @@ class Database:
     #   
     #---------------------------------------------------------------- 
     def Close(self):
-        self.sqlServer.disconnect()
+        if(self.sqlServer != None):
+            self.sqlServer.disconnect()
         self.sqlServer = None
         self.connected = False
         
@@ -220,7 +220,7 @@ class Database:
     # ASSUMPTION:
     #   argDb does not already exist as a database.
     #----------------------------------------------------------------
-    def CreateDb(self, argDb):
+    def CreateDB(self, argDb):
         query = "CREATE DATABASE " + argDb + ";"
         
         return self.__runCommand(query)
@@ -416,6 +416,73 @@ class Database:
     #----------------------------------------------------------------
     def Update_Question(self, argID, argQuestion):
         return self.Insert("questions", "question_id = " + argID, "question = '" + argQuestion + "'")
+    
+    #----------------------------------------------------------------
+    # TestClass(argHost, argUser, argPswd)
+    # DESC:
+    #   Simple test class that tests each major external function and 
+    #   returns true or false for each that passes it's test. All
+    #   results are stored in an array and return
+    #
+    # ARGUMENT:
+    #   argHost - STRING Host name to be used for SQL server log in.
+    #   argUser - STRING User name to be used for SQL server log in.
+    #   argPswd - STRING Password to be used for SQL server log in.
+    #
+    # RETURN:
+    #   LIST BOOLEAN - True for each successful test, False if one failed.
+    # ASSUMPTION:
+    #   The provided MySQL info connects to a valid server
+    #----------------------------------------------------------------
+    def TestClass(argHost, argUser, argPswd):
+        ret = []
+        
+        #Test __init__()
+        sql = Database(argHost, argUser, argPswd);
+        
+        ret.append(not sql.IsConnected())
+        
+        #Test Close()
+        sql.Close()
+        
+        ret.append(sql.IsConnected())
+        
+        #Test Reconnect()
+        sql.Reconnect(argHost, argUser, argPswd)
+        
+        ret.append(not sql.IsConnected())
+        
+        #Test CreateDB()/DoesDBExist()
+        sql.CreateDB("Test")
+        
+        ret.append(sql.DoesDBExist("Test"))
+        
+        #Test NewTable_Question()/DeleteTable()
+        sql.NewTable_Question()
+        
+        sql.DeleteTable("questions")
+        
+        #Test INSERT/DELETE/SELECT/UPDATE for questions
+        sql.NewTable_Question()
+        
+        sql.Insert_Question(1, "This is a test")
+        ret.append(sql.Select_Question(1) == "This is a test")
+        sql.Update_Question(1, "Now this is a question")
+        ret.append(sql.Select_Question(1) == "Now this is a question")
+        sql.Delete_Question(1)
+        ret.append(sql.Select_Question(1) == None)
+        
+        return ret
+
+
+# In[ ]:
+
+
+if __name__ == "__main__":
+    try:
+        ret = Database.TestClass(sys.argv[0], sys.argv[1], sys.argv[2])
+    except Error as err:
+            print(f"Error: '{err}'")
 
 
 # In[ ]:
