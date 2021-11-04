@@ -8,10 +8,14 @@ from django.shortcuts import redirect
 
 from dashboard.forms import DocumentForm
 
+#homepage for a basic user. 
+#displays available materials to the user
 def home(request):
     titles = ["t1", "t2", "t3", "t4"]
     return render(request, 'home.html', {'titles': titles});
 
+#page for file upload
+#saves file if it is valid
 def upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
