@@ -1,8 +1,8 @@
-#Heroku Setup Branch README
+# Heroku Setup Branch README
 
 This is the collection of the code from the Heroku getting started tutorial.
 
-#Testing
+# Testing
 1. Testing requires the Heroku CLI to be installed
 2. then run `heroku create`
 3. next run `heroku local web -f Procfile.windows`
