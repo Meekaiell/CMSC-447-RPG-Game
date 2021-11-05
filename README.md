@@ -30,7 +30,7 @@ Question_Test.py           - contains tests for class Question
 
 
 #### Description of class Question.py:
-`---------------------------------------------------------------------------------------------------------------------------------------
+`--------------------------------------------------------------------------------------------------------------------------------------- 
 Class Question: 
                       receives a string of one/multiple questions in a specified format
                       saves each question in the dictionary as a value with the coresponding question id as the key
@@ -38,8 +38,8 @@ Format of the input:
                       {id - integer} {question_number - integer} {question - string}
                       {list_of_answers - list of strings} {correct_answer_position - int or list of ints}
 
-Example:             4567: 3: What is orange? Answers: [color] [fruit] [vegetable] Correct: {1} {2} 
-                     452: 9: Which of the following are caller saved registers? Answers: [RAX] [RDI] [RSI] [RDX] Correct: {2} {4}
+Example:             `4567: 3: What is orange? Answers: [color] [fruit] [vegetable] Correct: {1} {2} `
+                     `452: 9: Which of the following are caller saved registers? Answers: [RAX] [RDI] [RSI] [RDX] Correct: {2} {4}`
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 
