@@ -51,9 +51,23 @@ class Server_SKT:
     #                hdr - a size value to be used in future implementation
     #                       to recieve a dynamic amount of data
     def recv(self,bytes = 4096, hdr = 10):
-        self.data = b''
-        self.data = self.sock.recv(bytes)
-        self.data = pickle.loads(self.data)
+        # self.data = b''
+        # self.data = self.sock.recv(bytes)
+        # self.data = pickle.loads(self.data)
+
+        time.sleep(1)
+        while True:
+            self.clnt, self.adr = self.sock.accept()
+            try:
+                while True:
+                    data = self.clnt.recv(bytes)
+                    if data:
+                        self.data = pickle.loads(data)
+                    else:
+                        break
+            finally:
+                self.clnt.close()
+
 
     # drop : This function drops the connection established with the client
     # prgram adnd resets the relative class values to their default
@@ -69,7 +83,7 @@ class Server_SKT:
 
 # Client_SKT : The client socket class for communicating with the
 # Server_SkT server class.
-# It attempts to connect to the socket pair passed in it's parameters
+#
 # Parameters:    host - The Ip address of the server program; default: localhost
 #                port - Desired port to bind and transmit over; default: 80
 class Client_SKT:
@@ -96,7 +110,8 @@ class Client_SKT:
     # Parameters:    data_out - object desired to transmitted
     def send(self, data_out):
         output = pickle.dumps(data_out)
-        self.sock.send(output)
+        self.sock.sendall(output)
+        time.sleep(2)
 
     # recv : This function takes recieves data of a fixe byte size. The pickle
     # unserializes the transmitted data for use by the recieving program
@@ -138,7 +153,7 @@ class USER:
         self.id = id
         self.start_time = st
         self.end_time = et
-        self.data
+        self.data = 0
 
     # print : Prints user object data variables
     def print(self):
