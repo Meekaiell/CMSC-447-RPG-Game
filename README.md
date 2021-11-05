@@ -38,8 +38,8 @@ Format of the input:
                       {id - integer} {question_number - integer} {question - string}
                       {list_of_answers - list of strings} {correct_answer_position - int or list of ints}
 
-Example:             `4567: 3: What is orange? Answers: [color] [fruit] [vegetable] Correct: {1} {2} `
-                     `452: 9: Which of the following are caller saved registers? Answers: [RAX] [RDI] [RSI] [RDX] Correct: {2} {4}`
+Example:             4567: 3: What is orange? Answers: [color] [fruit] [vegetable] Correct: {1} {2}
+                     452: 9: Which of the following are caller saved registers? Answers: [RAX] [RDI] [RSI] [RDX] Correct: {2} {4}
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -134,8 +134,8 @@ Example:             `4567: 3: What is orange? Answers: [color] [fruit] [vegetab
                  {list of correct answers positions} 
     Errors:      if wrong or unexisted id is passed - function returns None and prints a message
     Assumptions: question id exists in a dictionary
-    --------------------------------------------------------------------------------------------------------------------```
-
+    --------------------------------------------------------------------------------------------------------------------
+```
 
 #### Description of Question_Test.py:
 
