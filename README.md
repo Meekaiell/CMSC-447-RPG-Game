@@ -30,7 +30,7 @@ Question_Test.py           - contains tests for class Question
 
 
 #### Description of class Question.py:
-`--------------------------------------------------------------------------------------------------------------------------------------- 
+```--------------------------------------------------------------------------------------------------------------------------------------- 
 Class Question: 
                       receives a string of one/multiple questions in a specified format
                       saves each question in the dictionary as a value with the coresponding question id as the key
@@ -134,7 +134,7 @@ Example:             `4567: 3: What is orange? Answers: [color] [fruit] [vegetab
                  {list of correct answers positions} 
     Errors:      if wrong or unexisted id is passed - function returns None and prints a message
     Assumptions: question id exists in a dictionary
-    --------------------------------------------------------------------------------------------------------------------`
+    --------------------------------------------------------------------------------------------------------------------```
 
 
 #### Description of Question_Test.py:
