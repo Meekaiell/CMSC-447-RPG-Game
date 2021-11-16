@@ -1,14 +1,11 @@
-from django.db import models
-import re
+Files:
 
-class Document(models.Model):
-    description = models.CharField(max_length=255, blank=True)
-    document = models.FileField(upload_to='documents/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+class Question.py  - contains the the code for the question container
+Question_Test.py           - contains tests for class Question
 
-    class Meta:
-        app_label = 'documents'
 
+
+Description of class Question.py:
 #---------------------------------------------------------------------------------------------------------------------------------------
 # Class Question: 
 #                      receives a string of one/multiple questions in a specified format
@@ -21,16 +18,20 @@ class Document(models.Model):
 #                       #452: 9: Which of the following are caller saved registers? Answers: [RAX] [RDI] [RSI] [RDX] Correct: {2} {4}'
 #---------------------------------------------------------------------------------------------------------------------------------------
 
-class Question:
 
-    #--------------------------------------------------
-    #Constructor
-    #--------------------------------------------------
-    def __init__(self,passed_list):      
-        self.list = self.save_collection(passed_list)
-        self.dict = self.create_dict(self.list)        
+    #-------------------------------------------------------------------------------------------------------------------------------------
+    #Constructor: receives a string of one/multiple questions in a specified format
+                  containes a list for each question
+                  containes dictionary: 
+                                        key- question ID
+                                        value - list of bits for each question:
+                                                                                question number at [0] as int
+    #                                                                           question itself at [1] as string
+    #                                                                           answer choices at [2] as list of strings
+    #                                                                           correct answers positions at [3] as int or list of ints
+    #-------------------------------------------------------------------------------------------------------------------------------------
 
-    
+
     #--------------------------------------------------------------------------------------------------------------------
     #Name:        save_collection(self,passed_list):
     #Receives:    a string of questions in expected format:
@@ -39,12 +40,7 @@ class Question:
     #Description: iterates throught the string and separates each question, stores in a list, returns a list
     #Assumptions: questions passed in a specified format
     #--------------------------------------------------------------------------------------------------------------------
-    def save_collection(self, passed_list):        
-       
-        modified_list = passed_list.split('#')
-        modified_list = list(filter(None, modified_list))
 
-        return modified_list
 
     #--------------------------------------------------------------------------------------------------------
     #Name:        create_dict(self, modified_list):
@@ -59,75 +55,15 @@ class Question:
     #             the function returns dictionary        
     #Assumptions: questions passed in a specified format above 
     #--------------------------------------------------------------------------------------------------------
-    def create_dict(self, modified_list):
-   
-        new_list = []
-        list_to_zip = []
 
-        #EXTRACT ID:
-        for m in modified_list:
 
-            #Extracting id:
-            id = [re.search('(.+?):', x).group(1) for x in modified_list]     #extract id from the question
-            new_list = [re.sub('(.+?):', '', x, 1) for x in modified_list]    #removes id from question itself  
-            new_list = [(x.strip()) for x in new_list]                        #removes any empty space before question
-
-        #Extracting rest of the info:      
-        for i in (new_list):                                  
-             
-                 extracted_list = []
-
-                 #QUESTION NUMBER:
-                 match = re.compile('(.+?):')                                 #extract question number from the question
-                 question_number = match.search(i).group(1)                 
-                 question_number = int(question_number)                       #convert question_number to int
-                 i = re.sub('(.+?):', '', i, 1)                               #removes question number from the question
-                 i = i.strip()                                                #removes any empty space before question
-                 extracted_list.insert(0, question_number)                    #question number stored at [0]
-
-                 #QUESTION:
-                 match1 = re.compile('(.+?):')                                #extract question 
-                 question = match1.search(i).group(1)                 
-                 question = re.sub(r'\bAnswers\b', '', question, 1)
-                 i = re.sub('(.+?):', '', i, 1)                               #removes question from the rest of the string
-                 i = i.strip()                                                #removes any empty space before 
-                 extracted_list.insert(1, question)                           #question number stored at [0]
-
-                 #ANSWERS:
-                 answers = i.split('Answers:')[0]                    
-                 answers = re.sub(r'\bCorrect\b', '', answers, 1)             #extract answers in a separate string
-                 list_of_answers = []                                         #insert each answer in a list of answers
-                 pattern = re.compile(r'(?<=\[)(.*?)(?=\])')
-                 for k in re.findall(pattern,answers):
-                         list_of_answers.append(k)
-                 extracted_list.insert(2, list_of_answers)                    #question number stored at [0]
-
-                 #CORRECT ANSWER INDEX
-                 correct_answer = i.split('Correct:')[1]
-                 correct_answer = correct_answer.strip()
-                 list_of_correct_answers_positions = []
-                 pattern = re.compile(r'(?<=\{)(.*?)(?=\})')
-                 for k in re.findall(pattern,correct_answer):
-                         k = int(k)
-                         list_of_correct_answers_positions.append(k)
-                 extracted_list.insert(3, list_of_correct_answers_positions)  #question number stored at [0]
-                 
-                 list_to_zip.append(extracted_list)
-
-        #creating dictionary
-        dictionary = dict(zip(id, list_to_zip))                               #creates a dictionary: storing question id as key and rest as value
-        d = {int(k):v for k,v in dictionary.items()}                          #convert keys to int from string
-
-        return d
-     
     #--------------------------------------------------------------------------------------------------------
     #Name:        print_dictionary(self):
     #Receives:    -
     #Description: the function prints content of a dictionary  
     #Assumptions: -
     #--------------------------------------------------------------------------------------------------------
-    def print_dictionary(self):
-        print(self.dict)
+
 
     #--------------------------------------------------------------------------------------------------------------------
     #Name:        retrieve_full_question(self, id):
@@ -137,11 +73,7 @@ class Question:
     #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
     #Assumptions: question id exists in a dictionary
     #--------------------------------------------------------------------------------------------------------------------
-    def retrieve_full_question(self, id):
-        question = self.dict.get(id)
-        if(question == None):
-            print('Id is wrong or doesn\'t exist')
-        return question
+
 
     #--------------------------------------------------------------------------------------------------------------------
     #Name:        retrieve_question_number_only(self,id):
@@ -150,14 +82,8 @@ class Question:
     #             {question number} 
     #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
     #Assumptions: question id exists in a dictionary
-    #--------------------------------------------------------------------------------------------------------------------    
-    def retrieve_question_number_only(self,id):
-        full_question = self.dict.get(id)
-        if(full_question == None):
-            print('Id is wrong or doesn\'t exist')
-            return None
-        else:
-            return full_question[0]
+    #--------------------------------------------------------------------------------------------------------------------  
+
 
     #--------------------------------------------------------------------------------------------------------------------
     #Name:        retrieve_question_only(self,id):
@@ -167,13 +93,7 @@ class Question:
     #Errors:      if wrong or unexisted id is passed - function returns None and prints a message 
     #Assumptions: question id exists in a dictionary
     #--------------------------------------------------------------------------------------------------------------------    
-    def retrieve_question_only(self,id):
-        full_question = self.dict.get(id)
-        if(full_question == None):
-            print('Id is wrong or doesn\'t exist')  
-            return None
-        else:
-            return full_question[1]
+
 
     #--------------------------------------------------------------------------------------------------------------------
     #Name:        retrieve_list_of_answers_only(self,id):
@@ -183,14 +103,8 @@ class Question:
     #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
     #Assumptions: question id exists in a dictionary
     #--------------------------------------------------------------------------------------------------------------------  
-    def retrieve_list_of_answers_only(self,id):
-        full_question = self.dict.get(id)
-        if(full_question == None):
-            print('Id is wrong or doesn\'t exist')
-            return None
-        else:
-            return full_question[2]
-    
+
+
     #--------------------------------------------------------------------------------------------------------------------
     #Name:        retrieve_correct_answers_position_only(self,id):
     #Receives:    id (int) of a question desired to retrieve
@@ -199,11 +113,12 @@ class Question:
     #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
     #Assumptions: question id exists in a dictionary
     #--------------------------------------------------------------------------------------------------------------------  
-    def retrieve_correct_answers_position_only(self,id):
-        full_question = self.dict.get(id)
-        if(full_question == None):
-            print('Id is wrong or doesn\'t exist')
-            return None
-        else:
-            return full_question[3]
 
+
+Description of Question_Test.py:
+
+contains 2 parts: No-verbose tests(Pass/Fail)
+                  Verbose tests (prints content of dictionary, questions, separate question bits)
+
+to run the test:
+                  insert code from tests.py below in the class Question.py and run

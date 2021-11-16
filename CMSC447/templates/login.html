@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method = "post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    {{error}} <br>
+
+    <label for="username">Username: </label><br>
+    <input type = "text" id="username" name="username"><br>
+
+    <label for="password">Username: </label><br>
+    <input type = "text" id="password" name="password"><br>
+
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

@@ -12,7 +12,7 @@ from dashboard.forms import DocumentForm
 #displays available materials to the user
 def home(request):
     titles = ["t1", "t2", "t3", "t4"]
-    return render(request, 'home.html', {'titles': titles});
+    return render(request, 'home.html', {'titles': titles})
 
 #page for file upload
 #saves file if it is valid
@@ -27,3 +27,12 @@ def upload(request):
     return render(request, 'upload.html', {
         'form': form
     })
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        if username is "a" and password is "b" :
+            return redirect('home')            
+    return render(request, 'login.html')
