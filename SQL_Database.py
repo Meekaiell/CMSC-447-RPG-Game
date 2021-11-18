@@ -498,6 +498,72 @@ class Database:
         query = TABLE_USERS
         
         return self.__runCommand(query)
+    
+    #----------------------------------------------------------------
+    # Insert_User(self, argID, argUser, argPass)
+    # DESC:
+    #   Inserts new user in to 'users' table with an user name of 
+    #   [argUser] and a password hash of [argPass]. Sets admin to false
+    #
+    # ARGUMENT:
+    #   argUser - STRINE User name
+    #   argPass - STRING Password Hash
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'users' table exists in current database.
+    #----------------------------------------------------------------
+    def Insert_User(self, argUser, argPass):
+        insert = "(''" + argUser + "'', '" + argPass + "', 0)"
+        
+        return self.Insert("users", insert)
+    
+    #----------------------------------------------------------------
+    # Delete_Question(self, argUser)
+    # DESC:
+    #   Deletes question with User name of [argUser].
+    #
+    # ARGUMENT:
+    #   argUser - STRING Name of user to delete
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'user' table exists in current database.
+    #----------------------------------------------------------------
+    def Delete_User(self, argUser):
+        return self.Delete("users", "user_name = " + argUser)
+    
+    #----------------------------------------------------------------
+    # Select_User(self, argUser)
+    # DESC:
+    #   Returns information for user of [argUser].
+    #
+    # ARGUMENT:
+    #   argUser - STRING Name of user to return
+    # RETURN:
+    #   STRING - User info correlating to the User Name. 
+    #     None if User does not exist.
+    # ASSUMPTION:
+    #   'users' table exists in current database.
+    #----------------------------------------------------------------
+    def Select_User(self, argUser):
+        return self.Select("Users", "user_name = " + argUser, "*")
+    
+    #----------------------------------------------------------------
+    # Update_User(self, argUser, argPass)
+    # DESC:
+    #   Attempts to update password to [argPass] for user at [argUser]
+    #
+    # ARGUMENT:
+    #   argUser - STRING Name of user to update
+    #   argPass - STRING Password hash to store in database
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'users' table exists in current database.
+    #----------------------------------------------------------------
+    def Update_Users(self, argUser, argPass):
+        return self.Insert("users", "user_name = " + argUser, "user_password = '" + argPass + "'")
 
 
 # In[ ]:
