@@ -425,63 +425,6 @@ class Database:
         return self.Update("questions", "question_id = " + argID, "question = '" + argQuestion + "'")
     
     #----------------------------------------------------------------
-    # TestClass(argHost, argUser, argPswd)
-    # DESC:
-    #   Simple test class that tests each major external function and 
-    #   returns true or false for each that passes it's test. All
-    #   results are stored in an array and return
-    #
-    # ARGUMENT:
-    #   argHost - STRING Host name to be used for SQL server log in.
-    #   argUser - STRING User name to be used for SQL server log in.
-    #   argPswd - STRING Password to be used for SQL server log in.
-    #
-    # RETURN:
-    #   LIST BOOLEAN - True for each successful test, False if one failed.
-    # ASSUMPTION:
-    #   The provided MySQL info connects to a valid server
-    #----------------------------------------------------------------
-    def TestClass(argHost, argUser, argPswd):
-        ret = []
-        
-        #Test __init__()
-        sql = Database(argHost, argUser, argPswd);
-        
-        ret.append(not sql.IsConnected())
-        
-        #Test Close()
-        sql.Close()
-        
-        ret.append(sql.IsConnected())
-        
-        #Test Reconnect()
-        sql.Reconnect(argHost, argUser, argPswd)
-        
-        ret.append(not sql.IsConnected())
-        
-        #Test CreateDB()/DoesDBExist()
-        sql.CreateDB("Test")
-        
-        ret.append(sql.DoesDBExist("Test"))
-        
-        #Test NewTable_Question()/DeleteTable()
-        sql.NewTable_Question()
-        
-        sql.DeleteTable("questions")
-        
-        #Test INSERT/DELETE/SELECT/UPDATE for questions
-        sql.NewTable_Question()
-        
-        sql.Insert_Question(1, "This is a test")
-        ret.append(sql.Select_Question(1) == "This is a test")
-        sql.Update_Question(1, "Now this is a question")
-        ret.append(sql.Select_Question(1) == "Now this is a question")
-        sql.Delete_Question(1)
-        ret.append(sql.Select_Question(1) == None)
-        
-        return ret
-    
-    #----------------------------------------------------------------
     # NewTable_Users(self)
     # DESC:
     #   Creates a new table based off the SQL command constant 
@@ -579,10 +522,83 @@ class Database:
     # ASSUMPTION:
     #   'users' table exists in current database.
     #----------------------------------------------------------------
-    def Insert_User(self, argUser, argPass):
+    def Insert_Teacher(self, argUser, argPass):
         insert = "(''" + argUser + "'', '" + argPass + "', 1)"
         
         return self.Insert("users", insert)
+    
+    #----------------------------------------------------------------
+    # TestClass(argHost, argUser, argPswd)
+    # DESC:
+    #   Simple test class that tests each major external function and 
+    #   returns true or false for each that passes it's test. All
+    #   results are stored in an array and return
+    #
+    # ARGUMENT:
+    #   argHost - STRING Host name to be used for SQL server log in.
+    #   argUser - STRING User name to be used for SQL server log in.
+    #   argPswd - STRING Password to be used for SQL server log in.
+    #
+    # RETURN:
+    #   LIST BOOLEAN - True for each successful test, False if one failed.
+    # ASSUMPTION:
+    #   The provided MySQL info connects to a valid server
+    #----------------------------------------------------------------
+    def TestClass(argHost, argUser, argPswd):
+        ret = []
+        
+        #Test __init__()
+        sql = Database(argHost, argUser, argPswd);
+        
+        ret.append(not sql.IsConnected())
+        
+        #Test Close()
+        sql.Close()
+        
+        ret.append(sql.IsConnected())
+        
+        #Test Reconnect()
+        sql.Reconnect(argHost, argUser, argPswd)
+        
+        ret.append(not sql.IsConnected())
+        
+        #Test CreateDB()/DoesDBExist()
+        sql.CreateDB("Test")
+        
+        ret.append(sql.DoesDBExist("Test"))
+        
+        #Test NewTable_Question()/DeleteTable()
+        sql.NewTable_Question()
+        
+        sql.DeleteTable("questions")
+        
+        #Test INSERT/DELETE/SELECT/UPDATE for questions
+        sql.NewTable_Question()
+        
+        sql.Insert_Question(1, "This is a test")
+        ret.append(sql.Select_Question(1) == "This is a test")
+        sql.Update_Question(1, "Now this is a question")
+        ret.append(sql.Select_Question(1) == "Now this is a question")
+        sql.Delete_Question(1)
+        ret.append(sql.Select_Question(1) == None)
+        
+        #Test NewTable_Users
+        sql.NewTable_Users()
+        
+        #Test INSERT/DELETE/SELECT/UPDATE for users
+        sql.Insert_User("Test", "PASS1")
+        ret.append(sql.Select_User("Test") == "('Test','PASS1',0)")
+        sql.Update_User("Test", "PASS2")
+        ret.append(sql.Select_User("Test") == "('Test','PASS2',0)")
+        sql.Delete_User("Test")
+        ret.append(sql.Select_User("Test") == None)
+        
+        #Test INSERT for teacher
+        sql.Insert_Teacher("Test2", "PASS1")
+        ret.append(sql.Select_User("Test2") == "('Test2','PASS1',1)")
+        
+        sql.Close()
+        return ret
 
 
 # In[ ]:
