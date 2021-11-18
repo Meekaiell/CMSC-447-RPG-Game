@@ -17,9 +17,16 @@ class Database:
     TABLE_QUESTIONS = """
     CREATE TABLE questions (
       question_id INT PRIMARY KEY,
-      question CARCHAR(8000) NOT NULL
+      question VARCHAR(8000) NOT NULL
     );
     """
+    
+    TABLE_USERS = """
+    CREATE TABLE users (
+      user_name VARCHAR(30) PRIMARY KEY,
+      user_password VARCHAR(60) NOT NULL,
+      user_admin BOOL NOT NULL
+    );"""
     
     #----------------------------------------------------------------
     # __init__(self, argHost, argUser, argPswd)
@@ -473,6 +480,24 @@ class Database:
         ret.append(sql.Select_Question(1) == None)
         
         return ret
+    
+    #----------------------------------------------------------------
+    # NewTable_Users(self)
+    # DESC:
+    #   Creates a new table based off the SQL command constant 
+    #   TABLE_USERS defined at the beginning of the class.
+    #
+    # ARGUMENT:
+    #   
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   Table does not already exist.
+    #----------------------------------------------------------------
+    def NewTable_Users(self):
+        query = TABLE_USERS
+        
+        return self.__runCommand(query)
 
 
 # In[ ]:
