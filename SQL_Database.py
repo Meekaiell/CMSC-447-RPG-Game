@@ -422,7 +422,7 @@ class Database:
     #   'questions' table exists in current database.
     #----------------------------------------------------------------
     def Update_Question(self, argID, argQuestion):
-        return self.Insert("questions", "question_id = " + argID, "question = '" + argQuestion + "'")
+        return self.Update("questions", "question_id = " + argID, "question = '" + argQuestion + "'")
     
     #----------------------------------------------------------------
     # TestClass(argHost, argUser, argPswd)
@@ -563,7 +563,26 @@ class Database:
     #   'users' table exists in current database.
     #----------------------------------------------------------------
     def Update_Users(self, argUser, argPass):
-        return self.Insert("users", "user_name = " + argUser, "user_password = '" + argPass + "'")
+        return self.Update("users", "user_name = " + argUser, "user_password = '" + argPass + "'")
+    
+    #----------------------------------------------------------------
+    # Insert_Teacher(self, argID, argUser, argPass)
+    # DESC:
+    #   Inserts new teacher in to 'users' table with an user name of 
+    #   [argUser] and a password hash of [argPass]. Sets admin to true.
+    #
+    # ARGUMENT:
+    #   argUser - STRINE User name
+    #   argPass - STRING Password Hash
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'users' table exists in current database.
+    #----------------------------------------------------------------
+    def Insert_User(self, argUser, argPass):
+        insert = "(''" + argUser + "'', '" + argPass + "', 1)"
+        
+        return self.Insert("users", insert)
 
 
 # In[ ]:
