@@ -10,29 +10,32 @@ from dashboard.forms import DocumentForm
 
 #homepage for a basic user. 
 #displays available materials to the user
-def home(request):
+def student(request):
     titles = ["t1", "t2", "t3", "t4"]
-    return render(request, 'home.html', {'titles': titles})
+    return render(request, 'student.html', {'titles': titles})
 
 #page for file upload
 #saves file if it is valid
-def upload(request):
+def admin(request):
+
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('admin')
     else:
         form = DocumentForm()
-    return render(request, 'upload.html', {
-        'form': form
-    })
+    return render(request, 'admin.html', {'form' : form})
 
 def login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
-        if username is "a" and password is "b" :
-            return redirect('home')            
+        if username == "admin" and password == "admin" :
+            return redirect('admin')
+
+        if username == "student" and password == "student" :
+            return redirect('student')        
+        
     return render(request, 'login.html')

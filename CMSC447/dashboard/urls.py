@@ -6,7 +6,7 @@ from . import views
 #   (ip address)
 #   (ip address)/upload
 urlpatterns = [
-    path('home',views.home, name='home'),
-    path('upload', views.upload, name='upload'),
+    path('student',views.student, name='student'),
+    path('admin', views.admin, name='admin'),
     path('', views.login, name = 'login')
 ]
