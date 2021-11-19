@@ -22,7 +22,7 @@ class Server_SKT:
         self.sock.bind((self.host,self.port))
         self.sock.listen(self.listen)
 
-    # listen : This function allows the suer to adjust the server's 'listen'
+    # listen : This function allows the user to adjust the server's 'listen'
     # variable in order to adjust the backlog connection allowed to connect.
     # This effectively allows multiple users to bind in turn and connect on
     # first-come-first-serve basis.
