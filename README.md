@@ -1,6 +1,7 @@
 # CMSC-447-RPG-Game
 Students will create a role-playing game (RPG) system for completing assignments in CMSC 411. The system will contain exercises presented as "side quests" where students can build experience with the course material to prepare for exams. The system will also record aggregate statistics on student performance on exams and how their performance correlates with their "level". 
 
+#Iteration 2:
 ## Database
 
 The Database class in SQL_Database can be tested via two methods. 
@@ -155,3 +156,23 @@ This is the collection of the code from the Heroku getting started tutorial.
 3. next run `heroku local web -f Procfile.windows`
 4. then in your browser open and enter `http://localhost:5000/`, and then progam should output in the terminal window, and the browser will update.
 
+#Iteration 3:
+##Web Interface
+
+In order to run this software:
+1. Follow this tutorial to install django and python, as well as set up the necessary server: https://www.youtube.com/watch?v=VuETrwKYLTM
+2. type 'workon (whatever you named your server in the previous step)' into an ide terminal compatible with python
+3. type 'python manage.py (whatever you named your server in the previous step)' into the same terminal to start up the project server
+4. available pages to view:
+   (ip address)
+   This page displays a list of strings. The plan is for the list to pull document titles
+   from the database and each title links to a page that displays that document open.
+   (ip address) + "/upload"
+   This page allows the user to upload a file. The file is saved to the project's 'media' folder
+
+Partial functionality: when uploading a file, an error is thrown: "no such table: documents_document". The upload still works, but there is an error.
+
+##Threaded Server Test:
+1. Run Listen.py Muilithreaded test Server.
+2. Then run the ThreadTestX.py, X = A,B,C.
+This will cause the server to thread processes for the server to allow multiple connections.
