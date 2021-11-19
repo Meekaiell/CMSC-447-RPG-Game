@@ -17,9 +17,16 @@ class Database:
     TABLE_QUESTIONS = """
     CREATE TABLE questions (
       question_id INT PRIMARY KEY,
-      question CARCHAR(8000) NOT NULL
+      question VARCHAR(8000) NOT NULL
     );
     """
+    
+    TABLE_USERS = """
+    CREATE TABLE users (
+      user_name VARCHAR(30) PRIMARY KEY,
+      user_password VARCHAR(60) NOT NULL,
+      user_admin BOOL NOT NULL
+    );"""
     
     #----------------------------------------------------------------
     # __init__(self, argHost, argUser, argPswd)
@@ -415,7 +422,110 @@ class Database:
     #   'questions' table exists in current database.
     #----------------------------------------------------------------
     def Update_Question(self, argID, argQuestion):
-        return self.Insert("questions", "question_id = " + argID, "question = '" + argQuestion + "'")
+        return self.Update("questions", "question_id = " + argID, "question = '" + argQuestion + "'")
+    
+    #----------------------------------------------------------------
+    # NewTable_Users(self)
+    # DESC:
+    #   Creates a new table based off the SQL command constant 
+    #   TABLE_USERS defined at the beginning of the class.
+    #
+    # ARGUMENT:
+    #   
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   Table does not already exist.
+    #----------------------------------------------------------------
+    def NewTable_Users(self):
+        query = TABLE_USERS
+        
+        return self.__runCommand(query)
+    
+    #----------------------------------------------------------------
+    # Insert_User(self, argID, argUser, argPass)
+    # DESC:
+    #   Inserts new user in to 'users' table with an user name of 
+    #   [argUser] and a password hash of [argPass]. Sets admin to false
+    #
+    # ARGUMENT:
+    #   argUser - STRINE User name
+    #   argPass - STRING Password Hash
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'users' table exists in current database.
+    #----------------------------------------------------------------
+    def Insert_User(self, argUser, argPass):
+        insert = "(''" + argUser + "'', '" + argPass + "', 0)"
+        
+        return self.Insert("users", insert)
+    
+    #----------------------------------------------------------------
+    # Delete_Question(self, argUser)
+    # DESC:
+    #   Deletes question with User name of [argUser].
+    #
+    # ARGUMENT:
+    #   argUser - STRING Name of user to delete
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'user' table exists in current database.
+    #----------------------------------------------------------------
+    def Delete_User(self, argUser):
+        return self.Delete("users", "user_name = " + argUser)
+    
+    #----------------------------------------------------------------
+    # Select_User(self, argUser)
+    # DESC:
+    #   Returns information for user of [argUser].
+    #
+    # ARGUMENT:
+    #   argUser - STRING Name of user to return
+    # RETURN:
+    #   STRING - User info correlating to the User Name. 
+    #     None if User does not exist.
+    # ASSUMPTION:
+    #   'users' table exists in current database.
+    #----------------------------------------------------------------
+    def Select_User(self, argUser):
+        return self.Select("Users", "user_name = " + argUser, "*")
+    
+    #----------------------------------------------------------------
+    # Update_User(self, argUser, argPass)
+    # DESC:
+    #   Attempts to update password to [argPass] for user at [argUser]
+    #
+    # ARGUMENT:
+    #   argUser - STRING Name of user to update
+    #   argPass - STRING Password hash to store in database
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'users' table exists in current database.
+    #----------------------------------------------------------------
+    def Update_Users(self, argUser, argPass):
+        return self.Update("users", "user_name = " + argUser, "user_password = '" + argPass + "'")
+    
+    #----------------------------------------------------------------
+    # Insert_Teacher(self, argID, argUser, argPass)
+    # DESC:
+    #   Inserts new teacher in to 'users' table with an user name of 
+    #   [argUser] and a password hash of [argPass]. Sets admin to true.
+    #
+    # ARGUMENT:
+    #   argUser - STRINE User name
+    #   argPass - STRING Password Hash
+    # RETURN:
+    #   BOOLEAN - True if successful, False otherwise
+    # ASSUMPTION:
+    #   'users' table exists in current database.
+    #----------------------------------------------------------------
+    def Insert_Teacher(self, argUser, argPass):
+        insert = "(''" + argUser + "'', '" + argPass + "', 1)"
+        
+        return self.Insert("users", insert)
     
     #----------------------------------------------------------------
     # TestClass(argHost, argUser, argPswd)
@@ -472,6 +582,22 @@ class Database:
         sql.Delete_Question(1)
         ret.append(sql.Select_Question(1) == None)
         
+        #Test NewTable_Users
+        sql.NewTable_Users()
+        
+        #Test INSERT/DELETE/SELECT/UPDATE for users
+        sql.Insert_User("Test", "PASS1")
+        ret.append(sql.Select_User("Test") == "('Test','PASS1',0)")
+        sql.Update_User("Test", "PASS2")
+        ret.append(sql.Select_User("Test") == "('Test','PASS2',0)")
+        sql.Delete_User("Test")
+        ret.append(sql.Select_User("Test") == None)
+        
+        #Test INSERT for teacher
+        sql.Insert_Teacher("Test2", "PASS1")
+        ret.append(sql.Select_User("Test2") == "('Test2','PASS1',1)")
+        
+        sql.Close()
         return ret
 
 
