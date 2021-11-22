@@ -1,10 +1,13 @@
-from Sockets import Server_SKT, Client_SKT, USER, socket, pickle, time
+from Sockets import ServerSocket, USER, socket, pickle, time
 
 HOST = socket.gethostname()
 PORT = 4770
 
 # Creating server socket instance
-SR1 = Server_SKT(HOST, PORT)
+SR1 = ServerSocket(HOST, PORT)
+
+# Prompted testing interface for Server & client connection
+# Valid input: drop, send, recv, break
 while True:
     prompt = input('Action: ')
 
@@ -15,7 +18,7 @@ while True:
     # Test the sending of different data types
     elif prompt == 'send':
         valid = False
-        while valid == False:
+        while not valid:
             to_send = input('What to send? ')
             if to_send == 'msg':
                 msg = input('[Type Your Message]: ')
@@ -35,14 +38,13 @@ while True:
                 print('Sent: ', num)
                 valid = True
 
-    # Test the recieving funciton
+    # Test the receiving function
     elif prompt == 'recv':
         SR1.recv()
         if SR1.data:
             print('Received data: ', SR1.data)
         else:
             break
-
     elif prompt == 'break':
         break
 
