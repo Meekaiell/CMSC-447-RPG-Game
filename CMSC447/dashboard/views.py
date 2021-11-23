@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 
 from dashboard.forms import DocumentForm
 
+from dashboard import Question
+
 #homepage for a basic user. 
 #displays available materials to the user
 def student(request):
@@ -17,7 +19,6 @@ def student(request):
 #page for file upload
 #saves file if it is valid
 def admin(request):
-
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -36,6 +37,6 @@ def login(request):
             return redirect('admin')
 
         if username == "student" and password == "student" :
-            return redirect('student')        
+            return redirect('student')
         
     return render(request, 'login.html')
