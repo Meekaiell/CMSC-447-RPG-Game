@@ -2,6 +2,9 @@
 # Class Question: 
 #                      receives a string of one/multiple questions in a specified format
 #                      saves each question in the dictionary as a value with the coresponding question id as the key
+#                      can return bits of the question, edit question when question id is passed
+#                      can add a new question to the set of existing question
+#                      can return full questions(all components) as one string or a list of bits when id is passed
 # Format of the input: 
 #                      {id - integer} {question_number - integer} {question - string}
 #                      {list_of_answers - list of strings} {correct_answer_position - int or list of ints}
@@ -123,8 +126,8 @@ class Question:
     #--------------------------------------------------------------------------------------------------------------------
     #Name:        retrieve_full_question(self, id):
     #Receives:    id (int) of a question desired to retrieve
-    #Description: the function returns a full question:
-    #             {question number} {question} {list of answers} {list of positions corresponding to the correct answer} 
+    #Description: the function returns a full question as a list of bits:
+    #             {question number} {question} {list of answers} {list of positions corresponding to the correct answer}
     #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
     #Assumptions: question id exists in a dictionary
     #--------------------------------------------------------------------------------------------------------------------
@@ -133,6 +136,34 @@ class Question:
         if(question == None):
             print('Id is wrong or doesn\'t exist')
         return question
+
+    #--------------------------------------------------------------------------------------------------------------------
+    #Name:        retrieve_full_question_string(self, id):
+    #Receives:    id (int) of a question to retrieve
+    #Description: the function returns a full question in a form of a single string as:
+    #             #question_number. question_itself ?/. answer1 answer2 answer3; correctPosition1 correctPosition2
+    #Example:     
+    #    input:   #4567: 3: What is orange? Answers: [color] [fruit] [vegetable] Correct: {1} {2} 
+    #    output:  #3. What is orange? color fruit vegetable; 1 2
+    #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
+    #Assumptions: question id exists in a dictionary
+    #--------------------------------------------------------------------------------------------------------------------
+    def retrieve_full_question_string(self, id):
+        question = self.dict.get(id)
+        if(question == None):
+            print('Id is wrong or doesn\'t exist')
+        else:
+            my_string = '#' + str(question[0]) + '. ' + question[1] + ' '   #concatinate number and justion bits
+            string = ' '
+            temp_list_of_answers = [x + string for x in question[2]]        #add space for each item in asnwers list
+            temp_string = ''.join(map(str,temp_list_of_answers))            #convert list of answers to a single string
+            my_string = my_string + temp_string + ';'                       #add bits and separator between before positions
+
+            temp_positions = [str(x) for x in question[3]]                  #convert each int in list to string
+            temp_list_of_positions = [x + string for x in temp_positions]   #add spaces between correct positions
+            temp_string1 = ''.join(map(str,temp_list_of_positions))         #convert positions to a string
+            my_string = my_string + ' ' + temp_string1                      #add rest of the bits
+            return my_string
 
     #--------------------------------------------------------------------------------------------------------------------
     #Name:        retrieve_question_number_only(self,id):
@@ -197,4 +228,113 @@ class Question:
             return None
         else:
             return full_question[3]
+
+    #--------------------------------------------------------------------------------------------------------------------
+    #Name:        edit_question_id(self,current_id,new_id):
+    #Receives:    id (int) of a question to edit, new id number(int) to replace old id
+    #Description: the function edits the question id: new id replaces the old id
+    #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
+    #Assumptions: unique question id is passed
+    #-------------------------------------------------------------------------------------------------------------------- 
+    def edit_question_id(self,id,new_id):
+        full_question = self.dict.get(id)
+        if(full_question == None):
+            print('Id is wrong or doesn\'t exist')
+            return None
+        else:
+             self.dict[new_id] = self.dict.pop(id)
+
+    #--------------------------------------------------------------------------------------------------------------------
+    #Name:        edit_question_number(self,id,new_number):
+    #Receives:    id (int) of a question to edit, new question number(int) to replace old question numbers
+    #Description: the function edits the number of the question when passed a question id
+    #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
+    #Assumptions: unique question id is passed
+    #-------------------------------------------------------------------------------------------------------------------- 
+    def edit_question_number(self,id,new_number):
+        full_question = self.dict.get(id)
+        if(full_question == None):
+            print('Id is wrong or doesn\'t exist')
+            return None
+        else:
+            full_question[0] = new_number
+            self.dict[id] = full_question;
+
+
+    #--------------------------------------------------------------------------------------------------------------------
+    #Name:        edit_question_only(self,id,new_question):
+    #Receives:    id (int) of a question to edit, new question only (string) to replace old question
+    #Description: the function edits the question portion of the question when passed a question id
+    #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
+    #Assumptions: unique question id is passed
+    #-------------------------------------------------------------------------------------------------------------------- 
+    def edit_question_only(self,id,new_question):
+        full_question = self.dict.get(id)
+        if(full_question == None):
+            print('Id is wrong or doesn\'t exist')
+            return None
+        else:
+            full_question[1] = new_question
+            self.dict[id] = full_question;
+
+    #--------------------------------------------------------------------------------------------------------------------
+    #Name:        edit_answers_only(self,id,new_answers):
+    #Receives:    id (int) of a question to edit, new answers only in expected format (string) to replace answers:
+    #             input format: [answer1] [answer2] [answer3]...
+    #Description: the function edits the answers portion of the question when passed a question id
+    #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
+    #Assumptions: unique question id is passed, answers passed in expected format
+    #-------------------------------------------------------------------------------------------------------------------- 
+    def edit_answers_only(self,id,new_answers):
+        full_question = self.dict.get(id)
+        if(full_question == None):
+            print('Id is wrong or doesn\'t exist')
+            return None
+        else:
+            new_list_of_answers = []
+            pattern = re.compile(r'(?<=\[)(.*?)(?=\])')
+            for k in re.findall(pattern,new_answers):
+                new_list_of_answers.append(k)
+
+            full_question[2] = new_list_of_answers   #replace old list of answers with new
+            self.dict[id] = full_question;
+
+    #--------------------------------------------------------------------------------------------------------------------
+    #Name:        edit_correct_answers(self,id,new_positions):
+    #Receives:    id (int) of a question to edit, new correct answers positions only in expected format (string):
+    #             input format: {2} {4} ...
+    #Description: the function edits the answers portion of the question when passed a question id
+    #Errors:      if wrong or unexisted id is passed - function returns None and prints a message
+    #Assumptions: unique question id is passed, answers passed in expected format
+    #-------------------------------------------------------------------------------------------------------------------- 
+    def edit_correct_answers(self,id,new_positions):
+        full_question = self.dict.get(id)
+        if(full_question == None):
+            print('Id is wrong or doesn\'t exist')
+            return None
+        else:
+            new_list_of_positions = []
+            pattern = re.compile(r'(?<=\{)(.*?)(?=\})')
+            for k in re.findall(pattern,new_positions):
+                k = int(k)
+                new_list_of_positions.append(k)
+
+            full_question[3] = new_list_of_positions   #replace old list of answers with new
+            self.dict[id] = full_question;
+
+    
+    #--------------------------------------------------------------------------------------------------------------------
+    #Name:        add_new_question(self,id):
+    #Receives:    id (int) of a new question to add
+    #Description: the function adds a new question to the dictionary,
+    #             the function receives an id and fills with blanks a corresonding question bits
+    #Errors:      if duplicate id passed - 
+    #Assumptions: unique question id is passed
+    #-------------------------------------------------------------------------------------------------------------------- 
+    def add_new_question(self,id):
+        list = [0, '', '', 0]
+        self.dict[id] = list
+
+
+
 
