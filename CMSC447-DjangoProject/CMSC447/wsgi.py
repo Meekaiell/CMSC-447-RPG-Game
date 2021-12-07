@@ -1,5 +1,5 @@
 """
-WSGI config for CMSC447 project.
+WSGI config for CMSC447-DjangoProject project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CMSC447.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CMSC447-DjangoProject.settings')
 
 application = get_wsgi_application()
