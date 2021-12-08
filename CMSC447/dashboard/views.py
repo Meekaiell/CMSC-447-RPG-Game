@@ -26,7 +26,7 @@ def admin(request):
             return redirect('admin')
     else:
         form = DocumentForm()
-    return render(request, 'admin.html', {'form' : form})
+        return render(request, 'admin.html', {'form' : form})
 
 def login(request):
     if request.method == 'POST':
