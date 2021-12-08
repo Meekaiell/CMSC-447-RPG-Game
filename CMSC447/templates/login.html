@@ -1,20 +1,27 @@
 {% extends 'base.html' %}
-
+ 
 {% block content %}
-
+ 
+ 
+ 
 <form method = "post">
     {% csrf_token %}
     {{ form.as_p }}
-
+ 
     {{error}} <br>
-
-    <label for="username">Username: </label><br>
+   
+    <center>
+    <div style="width:400px;background-color: rgb(182, 182, 182);text-align:center;height:200px;border:1px solid #000;font-size: 30px">
+ 
+    <p style="color:rgb(60, 60, 60);line-height: .6;" label for="username">Username: </label><br>
     <input type = "text" id="username" name="username"><br>
-
-    <label for="password">Username: </label><br>
+ 
+    <p style="color:rgb(60, 60, 60);line-height: .6;" label for="password">Password: </label><br>
     <input type = "text" id="password" name="password"><br>
-
+ 
     <input type="submit" value="Submit">
+    </div>
+    </center>    
 </form>
-
+ 
 {% endblock %}

@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
-
+ 
 {% block content %}
-
-{% for title in titles %}
-    <li p style="color:rgb(145, 93, 93);">{{ title }}</li>
-{% endfor %}
-
+ 
+<center>
+    <div style = "font-size: 40px"><b>Questions</b><div>
+    <div style="width:1800px;background-color: rgb(182, 182, 182);text-align:left;height:1200px;border:1px solid #000;font-size: 30px">
+ 
+        {% for title in titles %}
+            <li p style="color:rgb(60, 60, 60)">{{ title }}</li>
+        {% endfor %}
+ 
+    </div>
+</center>
 {% endblock %}
