@@ -4,9 +4,15 @@ from django.core.files.storage import FileSystemStorage
 
 from django.shortcuts import redirect
 
-# Create your views here.
+#from dashboard import SQL_Database
 
 from dashboard.forms import DocumentForm
+
+from dashboard import Question
+
+# d = SQL_Database("cat","root","maggie")
+
+# Create your views here.
 
 #homepage for a basic user. 
 #displays available materials to the user
